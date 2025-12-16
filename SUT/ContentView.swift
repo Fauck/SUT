@@ -26,7 +26,7 @@ struct ContentView: View {
             // 第二個 Tab：房貸試算
             MortgageCalculatorView()
                 .tabItem {
-                    Label("房貸試算", systemImage: "calculator")
+                    Label("房貸試算", image: "home")
                 }
             
             // 第三個 Tab：健康記錄 (原 設定)
