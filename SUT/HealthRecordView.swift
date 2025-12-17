@@ -5,6 +5,7 @@ struct HealthRecordView: View {
     @StateObject private var viewModel = HealthViewModel()
     @State private var selectedDate: Date? = nil
     @State private var showEditSheet = false
+    @State private var showTrendChart = false // 新增：控制圖表視窗
     
     // UI 配色
     // 將原本的粉紅色改為柔和的藍色作為選中/今日的強調色
@@ -27,6 +28,8 @@ struct HealthRecordView: View {
                             .font(.system(size: 22, weight: .heavy, design: .rounded))
                             .foregroundColor(.primary.opacity(0.8))
                         Spacer()
+                        // 新增：圖表按鈕 (放在右箭頭之前)
+                        
                         changeMonthButton(icon: "chevron.right", by: 1)
                     }
                     .padding(.horizontal, 20)
@@ -38,7 +41,7 @@ struct HealthRecordView: View {
                             ForEach(["日", "一", "二", "三", "四", "五", "六"], id: \.self) { day in
                                 Text(day)
                                     .font(.system(size: 14, weight: .bold, design: .rounded))
-                                    // 修改週末的顏色，不再使用粉紅色
+                                // 修改週末的顏色，不再使用粉紅色
                                     .foregroundColor(day == "日" || day == "六" ? .gray : .gray)
                                     .frame(maxWidth: .infinity)
                             }
@@ -71,6 +74,11 @@ struct HealthRecordView: View {
                         .presentationDetents([.height(350)])
                         .presentationCornerRadius(30)
                 }
+            }
+            // 新增：圖表 Sheet
+            .sheet(isPresented: $showTrendChart) {
+                WeightTrendView(viewModel: viewModel)
+                    .presentationDetents([.medium, .large]) // 支援半開和全開
             }
             .onAppear {
                 viewModel.fetchRecords()
@@ -164,6 +172,17 @@ struct HealthRecordView: View {
                 Text("體重紀錄")
             }
             .padding(8).background(Color.white).cornerRadius(15).shadow(radius: 1)
+            Button(action: {
+                showTrendChart = true
+            }) {
+                Image(systemName: "chart.xyaxis.line")
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(.indigo) // 使用主題色
+                    .padding(10)
+                    .background(Color.indigo.opacity(0.1))
+                    .clipShape(Circle())
+            }
+            .padding(.trailing, 8)
         }
         .font(.system(size: 12, design: .rounded))
         .foregroundColor(.gray)
