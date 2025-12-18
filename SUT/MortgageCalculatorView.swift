@@ -1,19 +1,30 @@
 import SwiftUI
 
+// 新增：定義計算結果的資料模型 (必須遵循 Identifiable 以便用於 Sheet)
+struct MortgageResultData: Identifiable {
+    let id = UUID()
+    let loanAmount: Double
+    let downPayment: Double
+    let totalInterest: Double
+    let paymentDuringGrace: Double
+    let paymentAfterGrace: Double
+    let paymentNoGrace: Double
+    let gracePeriod: String
+}
+
 struct MortgageCalculatorView: View {
     // MARK: - 輸入變數
     @State private var totalPrice: String = ""       // 房屋總價 (萬)
-    @State private var downPayment: String = ""      // 新增：頭期款 (萬)
-    @State private var loanRatio: String = "80"      // 貸款成數 (%)
+    @State private var downPayment: String = ""      // 頭期款 (萬)
+    @State private var loanRatio: String = "85"      // 貸款成數 (%)
     @State private var loanYears: String = "30"      // 貸款年數
-    @State private var interestRate: String = "2.06" // 年利率 (%)
+    @State private var interestRate: String = "2.00" // 年利率 (%)
+    @State private var gracePeriod: String = "5"     // 寬限期 (年)
     
-    // MARK: - 計算結果
-    @State private var resultLoanAmount: Double = 0
-    @State private var resultTotalInterest: Double = 0
-    @State private var resultMonthlyPayment: Double = 0
-    @State private var resultDownPayment: Double = 0 // 新增：顯示最終頭期款
-    @State private var showResult = false
+    // MARK: - 計算結果狀態
+    // 修改：使用單一 Optional 物件來控制 Sheet 的顯示與資料傳遞
+    // 當此變數被賦值時，Sheet 會自動彈出；設為 nil 時，Sheet 關閉
+    @State private var calculationResult: MortgageResultData?
     
     // 鍵盤焦點控制
     @FocusState private var isInputFocused: Bool
@@ -24,13 +35,29 @@ struct MortgageCalculatorView: View {
                 // 輸入區塊
                 Section(header: Text("貸款資訊")) {
                     inputRow(title: "房屋總價 (萬元)", placeholder: "請輸入總價", text: $totalPrice)
-                    
-                    // 新增：頭期款輸入
-                    inputRow(title: "頭期款 (萬元)", placeholder: "選填，若輸入將優先採用", text: $downPayment)
-                    
+                    inputRow(title: "頭期款 (萬元)", placeholder: "選填，優先採用", text: $downPayment)
                     inputRow(title: "貸款成數 (%)", placeholder: "例如 80", text: $loanRatio)
                     inputRow(title: "貸款年數 (年)", placeholder: "例如 30", text: $loanYears)
                     inputRow(title: "年利率 (%)", placeholder: "例如 2.06", text: $interestRate)
+                    
+                    // 寬限期輸入 (限制 0-5 年)
+                    HStack {
+                        Text("寬限期 (年)")
+                            .foregroundColor(.primary)
+                        Spacer()
+                        TextField("最多 5 年", text: $gracePeriod)
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                            .focused($isInputFocused)
+                            .onChange(of: gracePeriod) { newValue in
+                                if let years = Int(newValue), years > 5 {
+                                    gracePeriod = "5"
+                                }
+                            }
+                    }
+                    Text("寬限期內只繳利息，不還本金 (上限5年)")
+                        .font(.caption)
+                        .foregroundColor(.gray)
                 }
                 
                 // 計算按鈕
@@ -46,17 +73,6 @@ struct MortgageCalculatorView: View {
                     }
                     .listRowBackground(Color.indigo)
                 }
-                
-                // 結果顯示區塊
-                if showResult {
-                    Section(header: Text("試算結果 (本息平均攤還)")) {
-                        // 新增：顯示自備款
-                        ResultRow(title: "自備頭期款", value: formatCurrency(resultDownPayment, suffix: "萬元"))
-                        ResultRow(title: "貸款總額", value: formatCurrency(resultLoanAmount, suffix: "萬元"))
-                        ResultRow(title: "每月還款", value: formatCurrency(resultMonthlyPayment, suffix: "元"))
-                        ResultRow(title: "利息總額", value: formatCurrency(resultTotalInterest, suffix: "元"))
-                    }
-                }
             }
             .navigationTitle("房貸試算")
             .toolbar {
@@ -67,7 +83,13 @@ struct MortgageCalculatorView: View {
                     }
                 }
             }
-            // 新增：當使用者輸入頭期款時，自動反推成數（提升 UX）
+            // 修改：使用 item 而非 isPresented，確保資料傳遞正確
+            .sheet(item: $calculationResult) { result in
+                MortgageResultView(data: result)
+                    .presentationDetents([.large])
+                    .presentationDragIndicator(.visible)
+            }
+            // 連動：輸入頭期款自動反推成數
             .onChange(of: downPayment) { newValue in
                 if let price = Double(totalPrice), let down = Double(newValue), price > 0 {
                     let ratio = ((price - down) / price) * 100
@@ -90,59 +112,150 @@ struct MortgageCalculatorView: View {
         }
     }
     
-    // MARK: - 計算邏輯 (本息平均攤還法)
+    // MARK: - 計算邏輯
     func calculateMortgage() {
-        isInputFocused = false // 收起鍵盤
+        isInputFocused = false
         
-        // 1. 基礎防呆：總價與年利率必須有值
         guard let priceWan = Double(totalPrice),
               let years = Double(loanYears),
               let ratePercent = Double(interestRate) else { return }
         
-        // 2. 決定貸款金額 (優先使用頭期款)
+        let graceYears = Double(gracePeriod) ?? 0
+        
+        // 1. 計算貸款總額 (萬)
         let loanAmountWan: Double
         let finalDownPayment: Double
         
         if let inputDown = Double(downPayment), inputDown < priceWan {
-            // 情境 A: 使用者有輸入頭期款
             finalDownPayment = inputDown
             loanAmountWan = priceWan - inputDown
         } else {
-            // 情境 B: 使用者沒輸入頭期款 (或輸入不合理)，改用成數計算
             let ratio = Double(loanRatio) ?? 80
             loanAmountWan = priceWan * (ratio / 100)
             finalDownPayment = priceWan - loanAmountWan
         }
         
-        // 轉換為實際金額 (元) 與月利率
         let loanAmount = loanAmountWan * 10000
         let monthRate = (ratePercent / 100) / 12
         let totalMonths = years * 12
+        let graceMonths = graceYears * 12
         
-        // 3. 本息平均攤還公式
-        let power = pow(1 + monthRate, totalMonths)
+        // --- 計算 A: 不使用寬限期 (本息平均攤還) ---
+        let noGracePMT = calculatePMT(principal: loanAmount, monthRate: monthRate, totalMonths: totalMonths)
         
-        let monthlyPayment: Double
-        if ratePercent == 0 {
-            monthlyPayment = loanAmount / totalMonths
+        // --- 計算 B: 使用寬限期 ---
+        // 1. 寬限期內 (只繳息)
+        let duringGracePMT = loanAmount * monthRate
+        
+        // 2. 寬限期後 (本息攤還，年限變短)
+        let remainingMonths = totalMonths - graceMonths
+        let afterGracePMT: Double
+        
+        if remainingMonths > 0 {
+            afterGracePMT = calculatePMT(principal: loanAmount, monthRate: monthRate, totalMonths: remainingMonths)
         } else {
-            monthlyPayment = loanAmount * (monthRate * power) / (power - 1)
+            afterGracePMT = 0
         }
         
-        let totalPayment = monthlyPayment * totalMonths
+        // --- 總利息計算 ---
+        let totalPayment: Double
+        if graceYears > 0 {
+            let gracePeriodTotal = duringGracePMT * graceMonths
+            let afterGraceTotal = afterGracePMT * remainingMonths
+            totalPayment = gracePeriodTotal + afterGraceTotal
+        } else {
+            totalPayment = noGracePMT * totalMonths
+        }
         let totalInterest = totalPayment - loanAmount
         
-        // 4. 更新結果狀態
+        // 修改：打包結果並賦值給 calculationResult，這會觸發 Sheet 顯示
+        let result = MortgageResultData(
+            loanAmount: loanAmountWan,
+            downPayment: finalDownPayment,
+            totalInterest: totalInterest,
+            paymentDuringGrace: graceYears > 0 ? duringGracePMT : 0,
+            paymentAfterGrace: graceYears > 0 ? afterGracePMT : 0,
+            paymentNoGrace: noGracePMT,
+            gracePeriod: gracePeriod
+        )
+        
         withAnimation {
-            resultDownPayment = finalDownPayment // 更新顯示用的頭期款
-            resultLoanAmount = loanAmountWan
-            resultMonthlyPayment = monthlyPayment
-            resultTotalInterest = totalInterest
-            showResult = true
+            calculationResult = result
         }
     }
     
-    // 格式化數字顯示
+    func calculatePMT(principal: Double, monthRate: Double, totalMonths: Double) -> Double {
+        if monthRate == 0 {
+            return principal / totalMonths
+        }
+        let power = pow(1 + monthRate, totalMonths)
+        return principal * (monthRate * power) / (power - 1)
+    }
+}
+
+// MARK: - 獨立的結果視圖 (Sheet)
+struct MortgageResultView: View {
+    @Environment(\.dismiss) var dismiss
+    
+    // 修改：直接接收打包好的資料模型
+    let data: MortgageResultData
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                Section(header: Text("資金規劃概覽")) {
+                    ResultRow(title: "自備頭期款", value: formatCurrency(data.downPayment, suffix: "萬元"))
+                    ResultRow(title: "貸款總額", value: formatCurrency(data.loanAmount, suffix: "萬元"))
+                    ResultRow(title: "總利息支出", value: formatCurrency(data.totalInterest, suffix: "元"))
+                }
+                
+                Section(header: Text("每月還款分析")) {
+                    if data.paymentDuringGrace > 0 {
+                        // 有使用寬限期的情況
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.blue)
+                                Text("方案 A：使用 \(data.gracePeriod) 年寬限期")
+                                    .font(.headline)
+                                    .foregroundColor(.blue)
+                            }
+                            
+                            ResultRow(title: "• 寬限期內 (只繳息)", value: formatCurrency(data.paymentDuringGrace, suffix: "元"))
+                                .foregroundColor(.green)
+                            ResultRow(title: "• 寬限期後 (本息攤)", value: formatCurrency(data.paymentAfterGrace, suffix: "元"))
+                                .foregroundColor(.red)
+                        }
+                        .padding(.vertical, 4)
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("方案 B：不使用寬限期")
+                                .font(.headline)
+                                .foregroundColor(.secondary)
+                            ResultRow(title: "• 每月平均繳款", value: formatCurrency(data.paymentNoGrace, suffix: "元"))
+                                .foregroundColor(.primary)
+                        }
+                        .padding(.vertical, 4)
+                        
+                    } else {
+                        // 沒有使用寬限期
+                        ResultRow(title: "每月平均繳款", value: formatCurrency(data.paymentNoGrace, suffix: "元"))
+                            .foregroundColor(.primary)
+                    }
+                }
+            }
+            .navigationTitle("試算結果")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("關閉") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+    
     func formatCurrency(_ value: Double, suffix: String) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -151,7 +264,7 @@ struct MortgageCalculatorView: View {
     }
 }
 
-// 結果列組件
+// 共用的結果列組件
 struct ResultRow: View {
     let title: String
     let value: String
@@ -163,13 +276,6 @@ struct ResultRow: View {
             Spacer()
             Text(value)
                 .font(.headline)
-                .foregroundColor(.indigo)
         }
-    }
-}
-
-struct MortgageCalculatorView_Previews: PreviewProvider {
-    static var previews: some View {
-        MortgageCalculatorView()
     }
 }
