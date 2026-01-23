@@ -2,7 +2,7 @@
 //  Untitled.swift
 //  SUT
 //
-//  Created by bokmacdev on 2025/12/10.
+//  Created by bokmacdev on 2025/12/10.check
 //
 import SwiftUI
 import CoreData
