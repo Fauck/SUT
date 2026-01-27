@@ -34,36 +34,6 @@
             endingLineNumber = "52"
             landmarkName = "init(inMemory:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "5A0C5A59-7721-416E-9135-2F30810A0A98 - 5aebb89640d88b58"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (__C.NSPersistentStoreDescription, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Yen.PersistenceController.init(inMemory: Swift.Bool) -&gt; Yen.PersistenceController"
-                  moduleName = "Yen.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bokmacdev/Desktop/SUT/SUT/Persistence.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "52"
-                  endingLineNumber = "52">
-               </Location>
-               <Location
-                  uuid = "5A0C5A59-7721-416E-9135-2F30810A0A98 - 98dc63b0e40cf5e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (__C.NSPersistentStoreDescription, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Donate_Debug.PersistenceController.init(inMemory: Swift.Bool) -&gt; Donate_Debug.PersistenceController"
-                  moduleName = "Donate Debug.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bokmacdev/Desktop/SUT/SUT/Persistence.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "52"
-                  endingLineNumber = "52">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
