@@ -10,3 +10,5 @@
 IS_APP_NAME = Donate Staging
 IS_APP_VERSION = 0.2
 IS_APP_BUNDLE_ID = com.intensifystudio.DonateStaging
+IS_APP_ICON = AppIconStaging
+
