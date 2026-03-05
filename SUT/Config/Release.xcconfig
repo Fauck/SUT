@@ -7,7 +7,7 @@
 
 // Configuration settings file format documentation can be found at:
 // https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
-IS_APP_NAME = Donate
+IS_APP_NAME = Yen
 IS_APP_VERSION = 0.1
 IS_APP_BUNDLE_ID = com.intensifystudio.DonateRelease
 IS_APP_ICON = AppIconRelease

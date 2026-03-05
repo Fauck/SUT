@@ -34,6 +34,36 @@
             endingLineNumber = "52"
             landmarkName = "init(inMemory:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "5A0C5A59-7721-416E-9135-2F30810A0A98 - 4147c8f91c902bae"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.NSPersistentStoreDescription, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Donate.PersistenceController.init(inMemory: Swift.Bool) -&gt; Donate.PersistenceController"
+                  moduleName = "Donate"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bokmacdev/Desktop/SUT/SUT/Persistence.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "52"
+                  endingLineNumber = "52">
+               </Location>
+               <Location
+                  uuid = "5A0C5A59-7721-416E-9135-2F30810A0A98 - 232b59eb034fea4d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.NSPersistentStoreDescription, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Yen.PersistenceController.init(inMemory: Swift.Bool) -&gt; Yen.PersistenceController"
+                  moduleName = "Yen"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bokmacdev/Desktop/SUT/SUT/Persistence.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "52"
+                  endingLineNumber = "52">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

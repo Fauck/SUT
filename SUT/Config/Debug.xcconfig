@@ -7,7 +7,7 @@
 
 // Configuration settings file format documentation can be found at:
 // https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
-IS_APP_NAME = Donate Debug
+IS_APP_NAME = Yentest
 IS_APP_VERSION = 0.3
 IS_APP_BUNDLE_ID = com.intensifystudio.DonateDebug
 IS_APP_ICON = AppIconDebug

@@ -12,7 +12,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1F9DE76D2EE80EF0000AAD83 /* Donate Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Donate Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F9DE76D2EE80EF0000AAD83 /* Yentest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Yentest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -47,7 +47,7 @@
 		1F9DE76E2EE80EF0000AAD83 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1F9DE76D2EE80EF0000AAD83 /* Donate Debug.app */,
+				1F9DE76D2EE80EF0000AAD83 /* Yentest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -76,7 +76,7 @@
 				1F39FC122F2B01D40055DA67 /* GoogleMaps */,
 			);
 			productName = SUT;
-			productReference = 1F9DE76D2EE80EF0000AAD83 /* Donate Debug.app */;
+			productReference = 1F9DE76D2EE80EF0000AAD83 /* Yentest.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
