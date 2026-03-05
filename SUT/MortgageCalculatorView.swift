@@ -20,7 +20,7 @@ struct MortgageCalculatorView: View {
     @State private var loanYears: String = "30"      // 貸款年數
     @State private var interestRate: String = "2.00" // 年利率 (%)
     @State private var gracePeriod: String = "5"     // 寬限期 (年)
-    
+    @State private var showMap = false
     // MARK: - 計算結果狀態
     // 修改：使用單一 Optional 物件來控制 Sheet 的顯示與資料傳遞
     // 當此變數被賦值時，Sheet 會自動彈出；設為 nil 時，Sheet 關閉
@@ -75,20 +75,37 @@ struct MortgageCalculatorView: View {
                 }
             }
             .navigationTitle("房貸試算")
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button("完成") {
-                        isInputFocused = false
-                    }
-                }
-            }
-            // 修改：使用 item 而非 isPresented，確保資料傳遞正確
-            .sheet(item: $calculationResult) { result in
-                MortgageResultView(data: result)
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
-            }
+                        .toolbar {
+                            // 鍵盤工具列 (完成按鈕)
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("完成") {
+                                    isInputFocused = false
+                                }
+                            }
+                            
+                            // 導航列工具：地圖按鈕
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button(action: {
+                                    showMap = true
+                                }) {
+                                    Image(systemName: "map.fill")
+                                        .foregroundColor(.indigo)
+                                }
+                            }
+                        }
+            // --- 彈出視窗設定 ---
+                        
+                        // 1. 結果視窗 (透過 item 觸發)
+                        .sheet(item: $calculationResult) { result in
+                            MortgageResultView(data: result)
+                                .presentationDetents([.medium, .large])
+                                .presentationDragIndicator(.visible)
+                        }
+                        // 2. 地圖視窗 (透過 isPresented 觸發)
+                        .sheet(isPresented: $showMap) {
+                            LocationMapView()
+                        }
             // 連動：輸入頭期款自動反推成數
             .onChange(of: downPayment) { newValue in
                 if let price = Double(totalPrice), let down = Double(newValue), price > 0 {

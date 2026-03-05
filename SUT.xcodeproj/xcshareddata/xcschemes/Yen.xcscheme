@@ -25,7 +25,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F9DE76C2EE80EF0000AAD83"
-               BuildableName = "Donate Debug.app"
+               BuildableName = "Donate.app"
                BlueprintName = "Yen"
                ReferencedContainer = "container:SUT.xcodeproj">
             </BuildableReference>
@@ -40,7 +40,7 @@
       shouldAutocreateTestPlan = "YES">
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -54,7 +54,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F9DE76C2EE80EF0000AAD83"
-            BuildableName = "Donate Debug.app"
+            BuildableName = "Donate.app"
             BlueprintName = "Yen"
             ReferencedContainer = "container:SUT.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F9DE76C2EE80EF0000AAD83"
-            BuildableName = "Donate Debug.app"
+            BuildableName = "Donate.app"
             BlueprintName = "Yen"
             ReferencedContainer = "container:SUT.xcodeproj">
          </BuildableReference>

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F39FC132F2B01D40055DA67 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 1F39FC122F2B01D40055DA67 /* GoogleMaps */; };
 		1F81C1B82F0CD85900AD70D6 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 1F81C1B72F0CD85900AD70D6 /* FirebaseDatabase */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F39FC132F2B01D40055DA67 /* GoogleMaps in Frameworks */,
 				1F81C1B82F0CD85900AD70D6 /* FirebaseDatabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,6 +73,7 @@
 			name = Yen;
 			packageProductDependencies = (
 				1F81C1B72F0CD85900AD70D6 /* FirebaseDatabase */,
+				1F39FC122F2B01D40055DA67 /* GoogleMaps */,
 			);
 			productName = SUT;
 			productReference = 1F9DE76D2EE80EF0000AAD83 /* Donate Debug.app */;
@@ -102,6 +105,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				1F81C1B62F0CD85900AD70D6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				1F39FC112F2B01D40055DA67 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1F9DE76E2EE80EF0000AAD83 /* Products */;
@@ -273,12 +277,14 @@
 				DEVELOPMENT_TEAM = VTAMFD3B55;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "取用你的位置";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IS_APP_ICON = "$(IS_APP_ICON)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -307,12 +313,14 @@
 				DEVELOPMENT_TEAM = VTAMFD3B55;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "取用你的位置";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IS_APP_ICON = "$(IS_APP_ICON)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -407,13 +415,14 @@
 				DEVELOPMENT_TEAM = VTAMFD3B55;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "取用你的位置";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
-				IS_APP_ICON = "";
+				IS_APP_ICON = "$(IS_APP_ICON)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -439,7 +448,7 @@
 				1F9DE77F2EE80EF2000AAD83 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		1F9DE7802EE80EF2000AAD83 /* Build configuration list for PBXNativeTarget "Yen" */ = {
 			isa = XCConfigurationList;
@@ -449,11 +458,19 @@
 				1F9DE7822EE80EF2000AAD83 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1F39FC112F2B01D40055DA67 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.8.0;
+			};
+		};
 		1F81C1B62F0CD85900AD70D6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -465,6 +482,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1F39FC122F2B01D40055DA67 /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1F39FC112F2B01D40055DA67 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
 		1F81C1B72F0CD85900AD70D6 /* FirebaseDatabase */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1F81C1B62F0CD85900AD70D6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
