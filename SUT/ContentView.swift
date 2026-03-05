@@ -20,7 +20,7 @@ struct ContentView: View {
             // 第一個 Tab：首頁
             ContractionTimerView()
                             .tabItem {
-                                Label("宮縮記錄", systemImage: "clock.heart.fill")
+                                Label("宮縮記錄", image: "heart")
                             }
             HomeView()
                 .tabItem {
