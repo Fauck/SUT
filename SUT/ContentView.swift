@@ -18,6 +18,10 @@ struct ContentView: View {
     var body: some View {
         TabView {
             // 第一個 Tab：首頁
+            ContractionTimerView()
+                            .tabItem {
+                                Label("宮縮記錄", systemImage: "clock.heart.fill")
+                            }
             HomeView()
                 .tabItem {
                     Label("首頁", systemImage: "house.fill")
@@ -34,10 +38,7 @@ struct ContentView: View {
                 .tabItem {
                     Label("健康記錄", systemImage: "heart.text.square.fill")
                 }
-            ContractionTimerView()
-                            .tabItem {
-                                Label("宮縮記錄", systemImage: "clock.heart.fill")
-                            }
+            
         }
         .accentColor(.indigo) // 設定 TabBar 選中顏色
     }

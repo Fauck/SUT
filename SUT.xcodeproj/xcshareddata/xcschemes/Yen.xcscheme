@@ -25,7 +25,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F9DE76C2EE80EF0000AAD83"
-               BuildableName = "Donate.app"
+               BuildableName = "Yen.app"
                BlueprintName = "Yen"
                ReferencedContainer = "container:SUT.xcodeproj">
             </BuildableReference>
@@ -54,7 +54,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F9DE76C2EE80EF0000AAD83"
-            BuildableName = "Donate.app"
+            BuildableName = "Yen.app"
             BlueprintName = "Yen"
             ReferencedContainer = "container:SUT.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F9DE76C2EE80EF0000AAD83"
-            BuildableName = "Donate.app"
+            BuildableName = "Yen.app"
             BlueprintName = "Yen"
             ReferencedContainer = "container:SUT.xcodeproj">
          </BuildableReference>
