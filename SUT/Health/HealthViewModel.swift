@@ -1,35 +1,7 @@
-//
-//  Untitled.swift
-//  SUT
-//
-//  Created by bokmacdev on 2025/12/10.check
-//
 import SwiftUI
 import CoreData
-//// MARK: - 獨立的 Core Data 管理器
-//class SimplePersistence {
-//    static let shared = SimplePersistence()
-//    let container: NSPersistentContainer
-//    
-//    // ⚠️ 請確認您的 Data Model 檔案名稱 (不含 .xcdatamodeld)
-//    // 如果您的檔案名稱不同 (例如 Model.xcdatamodeld)，請在此修改
-//    let containerName = "MeditationApp"
-//
-//    init() {
-//        container = NSPersistentContainer(name: containerName)
-//        container.loadPersistentStores { (storeDescription, error) in
-//            if let error = error as NSError? {
-//                print("❌ 資料庫載入失敗: \(error)")
-//            } else {
-//                print("✅ 資料庫載入成功")
-//            }
-//        }
-//        // 自動合併策略，避免多執行緒衝突
-//        container.viewContext.automaticallyMergesChangesFromParent = true
-//        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-//    }
-//}
-// MARK: - 4. ViewModel (邏輯核心)
+
+// MARK: - HealthViewModel (健康記錄邏輯核心)
 class HealthViewModel: ObservableObject {
     @Published var currentMonth: Date = Date()
     // 改回使用 [Date: DailyRecord]
@@ -42,9 +14,7 @@ class HealthViewModel: ObservableObject {
     
     // --- 日曆邏輯 ---
     var monthYearString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy年 MM月"
-        return formatter.string(from: currentMonth)
+        return AppFormatters.shared.monthYearFormatter.string(from: currentMonth)
     }
     
     var daysInMonth: [Date] {
@@ -66,10 +36,7 @@ class HealthViewModel: ObservableObject {
     }
     
     func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .full
-        formatter.locale = Locale(identifier: "zh_TW")
-        return formatter.string(from: date)
+        return AppFormatters.shared.fullDateFormatter.string(from: date)
     }
     
     // --- Core Data 操作 ---
@@ -101,20 +68,21 @@ class HealthViewModel: ObservableObject {
         return records[calendar.startOfDay(for: date)]
     }
     
-    func saveRecord(date: Date, weight: Double, hasExercise: Bool) {
+    func saveRecord(date: Date, weight: Double, hasExercise: Bool, exerciseType: String = "", exerciseDuration: Double = 0) {
         let startOfDay = calendar.startOfDay(for: date)
         
         let record: DailyRecord
         if let existing = records[startOfDay] {
             record = existing
         } else {
-            // 直接初始化 DailyRecord
             record = DailyRecord(context: context)
             record.date = startOfDay
         }
         
         record.weight = weight
         record.hasExercise = hasExercise
+        record.exerciseType = exerciseType
+        record.exerciseDuration = exerciseDuration
         
         do {
             try context.save()

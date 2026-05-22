@@ -75,25 +75,27 @@ struct MortgageCalculatorView: View {
                 }
             }
             .navigationTitle("房貸試算")
-                        .toolbar {
-                            // 鍵盤工具列 (完成按鈕)
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer()
-                                Button("完成") {
-                                    isInputFocused = false
-                                }
-                            }
-                            
-                            // 導航列工具：地圖按鈕
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                Button(action: {
-                                    showMap = true
-                                }) {
-                                    Image(systemName: "map.fill")
-                                        .foregroundColor(.indigo)
-                                }
-                            }
-                        }
+            .scrollDismissesKeyboard(.interactively)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("完成") {
+                        UIApplication.shared.sendAction(
+                            #selector(UIResponder.resignFirstResponder),
+                            to: nil, from: nil, for: nil
+                        )
+                    }
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showMap = true
+                    }) {
+                        Image(systemName: "map.fill")
+                            .foregroundColor(.indigo)
+                    }
+                }
+            }
             // --- 彈出視窗設定 ---
                         
                         // 1. 結果視窗 (透過 item 觸發)
@@ -131,7 +133,10 @@ struct MortgageCalculatorView: View {
     
     // MARK: - 計算邏輯
     func calculateMortgage() {
-        isInputFocused = false
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil, from: nil, for: nil
+        )
         
         guard let priceWan = Double(totalPrice),
               let years = Double(loanYears),
@@ -274,10 +279,7 @@ struct MortgageResultView: View {
     }
     
     func formatCurrency(_ value: Double, suffix: String) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 0
-        return (formatter.string(from: NSNumber(value: value)) ?? "0") + " " + suffix
+        return AppFormatters.shared.formatCurrency(value) + " " + suffix
     }
 }
 
